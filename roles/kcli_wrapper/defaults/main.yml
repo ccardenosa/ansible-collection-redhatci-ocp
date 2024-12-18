@@ -12,7 +12,7 @@
 # SSH both public and private keys to be used during
 # cluster deployment.
 #######################################################
-# ssh_key:
+# kcli_wrp_ssh_key:
 #   filename: ~/.ssh/id_rsa_for_vhub_cluster
 #   size: 2048
 #######################################################
@@ -70,7 +70,7 @@ libvirt:
 #           - vhub-br-net
 #           - vhub-macvtap-net
 #         keys:
-#           - "{{ ssh_key.filename }}.pub"
+#           - "{{ kcli_wrp_ssh_key.filename }}.pub"
 #         # api_ip: 172.16.33.5
 #         # ingress_ip: 172.16.33.6
 #         ctlplanes: 3
