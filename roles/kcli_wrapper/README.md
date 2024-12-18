@@ -22,7 +22,7 @@ Role Variables
 | kcli_wrp_libvirt | pool | Set the default kcli_wrp_libvirt pool to use.<br>Clean mode:<br>If `also_default` is `false`, the default pool won't be removed upon running with `--tags rollback`.<br>If `remove_files` is `false`, files that belongs to a pool won't be removed upon running with `--tags rollback` |`kcli_wrp_libvirt:`<br>&nbsp;&nbsp;&nbsp;&nbsp;`pool`:<br>&nbsp;&nbsp;&nbsp;&nbsp;`path`:<br>&nbsp;&nbsp;&nbsp;&nbsp;`clean_mode`:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`also_default`:&nbsp;false<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`remove_files`:&nbsp;false|
 | kcli | networks<br>clusters | Add `kcli` networks and clusters parameters to be passed through kcli command tool<br>The comprehensive list of values can be found here: https://kcli.readthedocs.io/en/latest/<br>KCLI Slack channel: https://kubernetes.slack.com/archives/CU76B52JE| None |
 | kcli_wrp_oc | url<br>dest | Install both `oc` and `kubectl` tools if they are not already installed| None |
-| dnsmasq | use_nm_plugin<br>drop_in_files | When defined, it generate dnsmasq drop-in file to be used along with the default dnsmasq instance running in the host machine<br>See some examples [here](https://docs.fedoraproject.org/en-US/fedora-server/administration/dnsmasq/) | None |
+| kcli_wrp_dnsmasq | use_nm_plugin<br>drop_in_files | When defined, it generate dnsmasq drop-in file to be used along with the default dnsmasq instance running in the host machine<br>See some examples [here](https://docs.fedoraproject.org/en-US/fedora-server/administration/dnsmasq/) | None |
 
 > **Note**: See [defaults.yml](defaults/main.yml) for futher details and examples
 
@@ -138,7 +138,7 @@ Including an example of how to use your role (for instance, with variables passe
             kcli_wrp_oc:
               url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
               dest: /usr/bin
-            dnsmasq:
+            kcli_wrp_dnsmasq:
               - path: /etc/NetworkManager/dnsmasq.d/99-example.lab.conf
                 content: |
                   local=/example.lab/
