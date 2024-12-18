@@ -6,7 +6,7 @@
 # supported by now), set to true the following
 # variable:
 #######################################################
-# install_depencencies: false
+# kcli_wrp_install_depencencies: false
 #######################################################
 # Comment out these lines to autogenerate a pair of
 # SSH both public and private keys to be used during
