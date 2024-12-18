@@ -9,10 +9,10 @@
     - name: Deleting libvirt networks
       ansible.builtin.command: |-
         kcli delete network {{ network.name }} --yes
-      register: del_net_ret
-      changed_when: del_net_ret.stdout != ''
+      register: _del_net_ret
+      changed_when: _del_net_ret.stdout != ''
       failed_when: |-
-        'is being used by' in del_net_ret.stderr
+        'is being used by' in _del_net_ret.stderr
       loop: "{{ kcli.networks }}"
       loop_control:
         loop_var: network
@@ -59,7 +59,7 @@
       ansible.builtin.tempfile:
         state: directory
         prefix: kcli_networks_
-      register: kcli_networks
+      register: _kcli_networks
 
     - name: Create libvirt bridges
       ansible.builtin.include_tasks: ./nmcli.yml
@@ -72,10 +72,10 @@
             network.bridgename is defined and
             network.nic is defined)
       ansible.builtin.shell: |-
-        cat << EOF > {{ kcli_networks.path }}/{{ network.name }}.yml
+        cat << EOF > {{ _kcli_networks.path }}/{{ network.name }}.yml
         {{ network | to_nice_yaml }}
         EOF
-        kcli create network --paramfile {{ kcli_networks.path }}/{{ network.name }}.yml {{ network.name }}
+        kcli create network --paramfile {{ _kcli_networks.path }}/{{ network.name }}.yml {{ network.name }}
       loop: "{{ kcli.networks }}"
       loop_control:
         loop_var: network
@@ -92,4 +92,4 @@
         path: "{{ item }}"
         state: absent
       loop:
-        - "{{ kcli_networks.path }}"
+        - "{{ _kcli_networks.path }}"

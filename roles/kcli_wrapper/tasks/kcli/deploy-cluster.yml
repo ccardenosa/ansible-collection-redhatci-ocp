@@ -9,8 +9,8 @@
     - name: Deleting cluster
       ansible.builtin.command: |-
         kcli delete cluster {{ cluster.parameters.cluster }} --yes
-      register: del_cluster_ret
-      changed_when: del_cluster_ret.stdout != ''
+      register: _del_cluster_ret
+      changed_when: _del_cluster_ret.stdout != ''
       loop: "{{ kcli.clusters }}"
       loop_control:
         loop_var: cluster
@@ -23,23 +23,23 @@
       ansible.builtin.tempfile:
         state: directory
         prefix: kcli_
-      register: kcli_tempdir
+      register: _kcli_tempdir
 
     - name: Dump base64 pull_secret to a local temporary file
       when: cluster.parameters.base64_pull_secret is defined
       ansible.builtin.shell: |-
         echo "{{ cluster.parameters.base64_pull_secret }}" | base64 -d \
-          > {{ kcli_tempdir.path }}/{{ cluster.parameters.cluster }}_pull_secret.yml
+          > {{ _kcli_tempdir.path }}/{{ cluster.parameters.cluster }}_pull_secret.yml
       loop: "{{ kcli.clusters }}"
       loop_control:
         loop_var: cluster
 
     - name: Create a k8s cluster
       ansible.builtin.shell: |-
-        pf={{ kcli_tempdir.path }}/{{ cluster.parameters.cluster }}_{{ cluster.type }}_cluster_parameters.yml
+        pf={{ _kcli_tempdir.path }}/{{ cluster.parameters.cluster }}_{{ cluster.type }}_cluster_parameters.yml
         cat << EOF > ${pf}
         {% if cluster.parameters.base64_pull_secret is defined %}
-        {% set ps = kcli_tempdir.path + "/" + cluster.parameters.cluster + "_pull_secret.yml" %}
+        {% set ps = _kcli_tempdir.path + "/" + cluster.parameters.cluster + "_pull_secret.yml" %}
         {% set _ = cluster.parameters.update({'base64_pull_secret': None, 'pull_secret': ps}) %}
         {% endif %}
         {{ cluster.parameters | to_nice_yaml }}
@@ -49,7 +49,7 @@
           --paramfile=${pf}
       async: 14400
       poll: 0
-      register: kcli_clusters
+      register: _kcli_clusters
       changed_when: false
       loop: "{{ kcli.clusters }}"
       loop_control:
@@ -58,16 +58,16 @@
     - name: Check cluster installation progess
       async_status:
         jid: "{{ kcli_cluster.ansible_job_id }}"
-      register: kcli_job_result
-      until: kcli_job_result.finished
+      register: _kcli_job_result
+      until: _kcli_job_result.finished
       retries: 120
       delay: 120
-      loop: "{{ kcli_clusters.results }}"
+      loop: "{{ _kcli_clusters.results }}"
       loop_control:
         loop_var: kcli_cluster
-    # changed_when: kcli_job_result.rc is defined and kcli_job_result.rc == 0
+    # changed_when: _kcli_job_result.rc is defined and _kcli_job_result.rc == 0
     # failed_when: |-
-    #   kcli_job_result.stderr != '' and kcli_job_result.rc != 0
+    #   _kcli_job_result.stderr != '' and _kcli_job_result.rc != 0
 
     # - name: Force all notified handlers to run at this point, not waiting for normal sync points
     #   ansible.builtin.meta: flush_handlers
@@ -95,4 +95,4 @@
         path: "{{ item }}"
         state: absent
       loop:
-        - "{{ kcli_tempdir.path }}"
+        - "{{ _kcli_tempdir.path }}"

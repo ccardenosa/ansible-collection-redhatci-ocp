@@ -16,8 +16,8 @@
         {% if libvirt.pool.clean_mode.remove_files is defined and libvirt.pool.clean_mode.remove_files %}
         rm -fr {{ libvirt.pool.path }}
         {% endif %}
-      register: del_pool_ret
-      changed_when: del_pool_ret.stdout != ''
+      register: _del_pool_ret
+      changed_when: _del_pool_ret.stdout != ''
 
 - name: Create libvirt networks
   when: libvirt.pool.name is defined and
@@ -37,12 +37,12 @@
     - name: Determine if libvirt pool folder exists
       ansible.builtin.stat:
         path: "{{ libvirt.pool.path }}"
-      register: image_pool_folder
+      register: _image_pool_folder
 
     # $ ansible-galaxy collection install ansible.posix
     - name: Set ACL information to image pool folder
       become: true
-      when: image_pool_folder.stat.exists and
+      when: _image_pool_folder.stat.exists and
             ansible_user_id != 'root'
       ansible.posix.acl:
         path: "{{ libvirt.pool.path }}"
@@ -57,11 +57,11 @@
     - name: Determine if /var/lib/libvirt/images pool folder exists
       ansible.builtin.stat:
         path: /var/lib/libvirt/images
-      register: image_pool_folder
+      register: _image_pool_folder
 
     - name: Set ACL information to image pool folder
       become: true
-      when: image_pool_folder.stat.exists and
+      when: _image_pool_folder.stat.exists and
             ansible_user_id != 'root'
       ansible.posix.acl:
         path: /var/lib/libvirt/images
