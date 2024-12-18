@@ -38,7 +38,7 @@
       state: latest
 
 - name: Install oc tool
-  when: oc.url is defined
+  when: kcli_wrp_oc.url is defined
   block:
 
   - name: Check if oc tool is installed
@@ -51,8 +51,8 @@
     become: true
     when: _oc_installed.rc not in [ 0 ]
     ansible.builtin.unarchive:
-      src: "{{ oc.url }}"
-      dest: "{{ oc.dest | default('/usr/bin') }}"
+      src: "{{ kcli_wrp_oc.url }}"
+      dest: "{{ kcli_wrp_oc.dest | default('/usr/bin') }}"
       mode: "0755"
       remote_src: yes
       include:

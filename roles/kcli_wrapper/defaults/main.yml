@@ -98,7 +98,7 @@ kcli_wrp_libvirt:
 # Comment out these lines to install both 'oc' and
 # 'kubectl' tools if they are not already installed
 #######################################################
-# oc:
+# kcli_wrp_oc:
 #   url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
 #   dest: /usr/bin
 #######################################################
