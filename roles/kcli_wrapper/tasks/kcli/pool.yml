@@ -1,6 +1,6 @@
 ---
 - name: Delete libvirt pool
-  when: libvirt.pool.name is defined and
+  when: kcli_wrp_libvirt.pool.name is defined and
         ('rollback' in ansible_run_tags)
   tags:
     - rollback
@@ -8,35 +8,35 @@
 
     - name: Deleting libvirt pool
       become: true
-      when: libvirt.pool.name != 'default' or
-            (libvirt.pool.clean_mode.also_default is defined and
-             libvirt.pool.clean_mode.also_default)
+      when: kcli_wrp_libvirt.pool.name != 'default' or
+            (kcli_wrp_libvirt.pool.clean_mode.also_default is defined and
+             kcli_wrp_libvirt.pool.clean_mode.also_default)
       ansible.builtin.shell: |-
-        kcli delete pool {{ libvirt.pool.name }} --yes
-        {% if libvirt.pool.clean_mode.remove_files is defined and libvirt.pool.clean_mode.remove_files %}
-        rm -fr {{ libvirt.pool.path }}
+        kcli delete pool {{ kcli_wrp_libvirt.pool.name }} --yes
+        {% if kcli_wrp_libvirt.pool.clean_mode.remove_files is defined and kcli_wrp_libvirt.pool.clean_mode.remove_files %}
+        rm -fr {{ kcli_wrp_libvirt.pool.path }}
         {% endif %}
       register: _del_pool_ret
       changed_when: _del_pool_ret.stdout != ''
 
 - name: Create libvirt networks
-  when: libvirt.pool.name is defined and
-        libvirt.pool.path is defined
+  when: kcli_wrp_libvirt.pool.name is defined and
+        kcli_wrp_libvirt.pool.path is defined
   block:
 
     - name: Create KCLI image pool
       become: true
       ansible.builtin.shell: |-
-        kcli list pool | grep '{{ libvirt.pool.name }}.*{{ libvirt.pool.path | replace("~", "") }}' > /dev/null
+        kcli list pool | grep '{{ kcli_wrp_libvirt.pool.name }}.*{{ kcli_wrp_libvirt.pool.path | replace("~", "") }}' > /dev/null
         if [ $? -ne 0 ];then
           echo "Creating Libvirt default pool..."
-          mkdir -pv {{ libvirt.pool.path }}
-          kcli create pool -p {{ libvirt.pool.path }} {{ libvirt.pool.name }}
+          mkdir -pv {{ kcli_wrp_libvirt.pool.path }}
+          kcli create pool -p {{ kcli_wrp_libvirt.pool.path }} {{ kcli_wrp_libvirt.pool.name }}
         fi
 
     - name: Determine if libvirt pool folder exists
       ansible.builtin.stat:
-        path: "{{ libvirt.pool.path }}"
+        path: "{{ kcli_wrp_libvirt.pool.path }}"
       register: _image_pool_folder
 
     # $ ansible-galaxy collection install ansible.posix
@@ -45,7 +45,7 @@
       when: _image_pool_folder.stat.exists and
             ansible_user_id != 'root'
       ansible.posix.acl:
-        path: "{{ libvirt.pool.path }}"
+        path: "{{ kcli_wrp_libvirt.pool.path }}"
         entity: "{{ item }}"
         etype: user
         permissions: rwx
@@ -77,4 +77,4 @@
       changed_when: false
       ansible.builtin.shell: |
         kcli list pools
-        getfacl -e {{ libvirt.pool.path }}
+        getfacl -e {{ kcli_wrp_libvirt.pool.path }}

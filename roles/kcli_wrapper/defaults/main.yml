@@ -24,7 +24,7 @@
 # pool won't be removed upon running with
 # '--tags rollback'
 #######################################################
-libvirt:
+kcli_wrp_libvirt:
   pool:
     name: default
     path: /var/lib/libvirt/images
@@ -64,7 +64,7 @@ libvirt:
 #         version: stable
 #         tag: 4.14
 #         domain: example.lab
-#         pool: "{{ libvirt.pool.name }}"
+#         pool: "{{ kcli_wrp_libvirt.pool.name }}"
 #         nets:
 #           - vhub-net
 #           - vhub-br-net
