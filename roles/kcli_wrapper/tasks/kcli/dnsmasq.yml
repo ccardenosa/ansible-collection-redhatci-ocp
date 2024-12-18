@@ -37,12 +37,12 @@
         - "{{ handler_to_use }}"
 
     - name: Cleanning /etc/hosts file
-      when: kcli.parameters.cluster is defined and
-            kcli.parameters.domain is defined
+      when: kcli_wrp.parameters.cluster is defined and
+            kcli_wrp.parameters.domain is defined
       ansible.builtin.lineinfile:
         path: /etc/hosts
         state: absent
-        regexp: '{{ kcli.parameters.cluster }}.{{ kcli.parameters.domain }}'
+        regexp: '{{ kcli_wrp.parameters.cluster }}.{{ kcli_wrp.parameters.domain }}'
       notify:
         - "{{ handler_to_use }}"
 

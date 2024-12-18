@@ -1,6 +1,6 @@
 ---
 - name: Rollback openshift cluster
-  when: kcli is defined and
+  when: kcli_wrp is defined and
         'rollback' in ansible_run_tags
   tags:
     - rollback
@@ -11,12 +11,12 @@
         kcli delete cluster {{ cluster.parameters.cluster }} --yes
       register: _del_cluster_ret
       changed_when: _del_cluster_ret.stdout != ''
-      loop: "{{ kcli.clusters }}"
+      loop: "{{ kcli_wrp.clusters }}"
       loop_control:
         loop_var: cluster
 
 - name: Deploy cluster
-  when: kcli is defined
+  when: kcli_wrp is defined
   block:
 
     - name: Create temporary kcli cluster parameter file
@@ -30,7 +30,7 @@
       ansible.builtin.shell: |-
         echo "{{ cluster.parameters.base64_pull_secret }}" | base64 -d \
           > {{ _kcli_tempdir.path }}/{{ cluster.parameters.cluster }}_pull_secret.yml
-      loop: "{{ kcli.clusters }}"
+      loop: "{{ kcli_wrp.clusters }}"
       loop_control:
         loop_var: cluster
 
@@ -51,7 +51,7 @@
       poll: 0
       register: _kcli_clusters
       changed_when: false
-      loop: "{{ kcli.clusters }}"
+      loop: "{{ kcli_wrp.clusters }}"
       loop_control:
         loop_var: cluster
 
@@ -84,7 +84,7 @@
             --kubeconfig ~/.kcli/clusters/{{ cluster.parameters.cluster }}/auth/kubeconfig \
             get node -owide
         fi
-      loop: "{{ kcli.clusters }}"
+      loop: "{{ kcli_wrp.clusters }}"
       loop_control:
         loop_var: cluster
 

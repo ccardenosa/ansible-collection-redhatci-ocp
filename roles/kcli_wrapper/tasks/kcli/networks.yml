@@ -1,6 +1,6 @@
 ---
 - name: Delete libvirt networks
-  when: kcli.networks is defined and
+  when: kcli_wrp.networks is defined and
         ('rollback' in ansible_run_tags)
   tags:
     - rollback
@@ -13,18 +13,18 @@
       changed_when: _del_net_ret.stdout != ''
       failed_when: |-
         'is being used by' in _del_net_ret.stderr
-      loop: "{{ kcli.networks }}"
+      loop: "{{ kcli_wrp.networks }}"
       loop_control:
         loop_var: network
 
     - name: Delete libvirt bridges
       ansible.builtin.include_tasks: ./nmcli.yml
-      loop: "{{ kcli.networks }}"
+      loop: "{{ kcli_wrp.networks }}"
       loop_control:
         loop_var: network
 
 - name: Create libvirt networks
-  when: kcli.networks is defined
+  when: kcli_wrp.networks is defined
   block:
 
     - name: Setup Linux kernel to support IPv6 and IP forwarding
@@ -63,7 +63,7 @@
 
     - name: Create libvirt bridges
       ansible.builtin.include_tasks: ./nmcli.yml
-      loop: "{{ kcli.networks }}"
+      loop: "{{ kcli_wrp.networks }}"
       loop_control:
         loop_var: network
 
@@ -76,7 +76,7 @@
         {{ network | to_nice_yaml }}
         EOF
         kcli create network --paramfile {{ _kcli_networks.path }}/{{ network.name }}.yml {{ network.name }}
-      loop: "{{ kcli.networks }}"
+      loop: "{{ kcli_wrp.networks }}"
       loop_control:
         loop_var: network
 

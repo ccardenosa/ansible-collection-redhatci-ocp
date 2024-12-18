@@ -40,8 +40,14 @@
         conn_name: "{{ network.bridgename }}"
         ifname: "{{ network.name }}"
         stp: false
-        # method4: disabled
-        # method6: disabled
+        method4: |-
+          {%- if network.bridge_ip is defined -%}
+          manual
+          {%- else -%}
+          auto
+          {%- endif -%}
+        ip4: "{{ network.bridge_ip | default([]) }}"
+        method6: auto
         state: present
 
     - name: Create bridge-slave
@@ -49,16 +55,16 @@
         type: ethernet
         slave_type: bridge
         autoconnect: yes
-        conn_name: "{{ network.name }}"
+        conn_name: "{{ network.nic }}"
         ifname: "{{ network.nic }}"
         master: "{{ network.name }}"
         state: present
 
-    - name: Deactivate network interface connection
-      ansible.builtin.shell: |-
-        NIC_UUID=$(nmcli -f device,uuid connection | grep '{{ network.nic }}' | awk '{print $2}')
-        nmcli connection down uuid ${NIC_UUID}
-        nmcli connection up {{ network.name }}
+    - name: Restart NetworkManager
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+        state: restarted
+        name: NetworkManager
 
     - name: Check connections
       ansible.builtin.shell: |-
