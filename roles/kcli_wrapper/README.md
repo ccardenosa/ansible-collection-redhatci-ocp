@@ -83,7 +83,7 @@ Including an example of how to use your role (for instance, with variables passe
               pool:
                 name: my_pool
                 path: /opt/libvirt/images
-            kcli:
+            kcli_wrp:
               networks:
                 - name: my-net
                   type: network
