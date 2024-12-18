@@ -107,7 +107,7 @@ kcli_wrp_libvirt:
 # running in the host machine
 # [https://docs.fedoraproject.org/en-US/fedora-server/administration/dnsmasq/]
 #######################################################
-# dnsmasq:
+# kcli_wrp_dnsmasq:
 #   use_nm_plugin: true
 #   drop_in_files:
 #     - path: /etc/NetworkManager/dnsmasq.d/70-{{ kcli_wrp.parameters.cluster }}.conf
