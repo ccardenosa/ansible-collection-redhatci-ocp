@@ -137,7 +137,7 @@ kcli_wrp_libvirt:
 # done and store as ansible_facts into the following
 # variables to be used by next playbooks:
 #
-# credentials:
+# kcli_wrp_credentials:
 #   <cluster_name_0>:
 #     kubeconfig: ...
 #     b64_kubeconfig: ...
@@ -154,7 +154,7 @@ kcli_wrp_libvirt:
 # In any case, the credentials will still be available
 # in the shown host node path below.
 #######################################################
-# credentials:
+# kcli_wrp_credentials:
 #   clusters_details: ~/.kcli/clusters
 #   kubeconfig: auth/kubeconfig
 #   kubeadmin_password: auth/kubeadmin-password
