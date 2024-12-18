@@ -38,7 +38,7 @@ kcli_wrp_libvirt:
 # KCLI Slack channel:
 # https://kubernetes.slack.com/archives/CU76B52JE
 #######################################################
-# kcli:
+# kcli_wrp:
 #   networks:
 #     - name: vhub-net
 #       type: network
@@ -46,9 +46,11 @@ kcli_wrp_libvirt:
 #       cidr: 172.16.33.0/24
 #       secondary_cidr: fc00:52:0:1305::0/64
 #       gateway: 172.16.33.1
-#     - name: vhub-br-net
+#     - name: baremetal
 #       bridge: true
-#       bridgename: virbr0
+#       bridgename: baremetal
+#       nic: eth0
+#       bridge_ip: "192.168.80.1/25"
 #     - name: vhub-macvtap-net
 #       macvtap: true
 #       nic: eth0
@@ -108,17 +110,17 @@ kcli_wrp_libvirt:
 # dnsmasq:
 #   use_nm_plugin: true
 #   drop_in_files:
-#     - path: /etc/NetworkManager/dnsmasq.d/70-{{ kcli.parameters.cluster }}.conf
+#     - path: /etc/NetworkManager/dnsmasq.d/70-{{ kcli_wrp.parameters.cluster }}.conf
 #       content: |
-#         # /etc/NetworkManager/dnsmasq.d/70-{{ kcli.parameters.cluster }}.conf
+#         # /etc/NetworkManager/dnsmasq.d/70-{{ kcli_wrp.parameters.cluster }}.conf
 #         #
 #         # This file directs dnsmasq to forward any request to resolve
 #         # names under the .custom-dns.lab domain to 172.16.55.1, a
 #         # custom DNS server.
 #         server=/custom-dns.lab/172.16.55.1
-#     - path: /etc/NetworkManager/dnsmasq.d/70-{{ kcli.parameters.cluster }}.conf
+#     - path: /etc/NetworkManager/dnsmasq.d/70-{{ kcli_wrp.parameters.cluster }}.conf
 #       content: |
-#         # /etc/NetworkManager/dnsmasq.d/70-{{ kcli.parameters.cluster }}.conf
+#         # /etc/NetworkManager/dnsmasq.d/70-{{ kcli_wrp.parameters.cluster }}.conf
 #         #
 #         # This file sets up the local lablab domain and
 #         # defines some aliases and a wildcard.
