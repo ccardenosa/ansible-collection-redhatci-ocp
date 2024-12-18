@@ -29,18 +29,18 @@ Role Variables
 Results
 ------------
 
-If `credentials` is defined:
+If `kcli_wrp_credentials` is defined:
 
     # NOTE: Do not change these default values
     # These are the path for the KCLI to store credentials:
-    credentials:
+    kcli_wrp_credentials:
       clusters_details: ~/.kcli/clusters
       kubeconfig: auth/kubeconfig
       kubeadmin_password: auth/kubeadmin-password
 
 These files are read after cluster deployment is done and store as `ansible_facts` into the following variables to be used by next playbooks:
 
-    credentials:
+    kcli_wrp_credentials:
       <cluster_name_0>:
         kubeconfig: ...
         b64_kubeconfig: ...
