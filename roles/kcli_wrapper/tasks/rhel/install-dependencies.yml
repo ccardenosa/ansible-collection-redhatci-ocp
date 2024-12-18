@@ -44,12 +44,12 @@
   - name: Check if oc tool is installed
     ansible.builtin.command: which oc
     changed_when: false
-    failed_when: oc_installed.rc not in [0,1]
-    register: oc_installed
+    failed_when: _oc_installed.rc not in [0,1]
+    register: _oc_installed
 
   - name: Install oc tool
     become: true
-    when: oc_installed.rc not in [ 0 ]
+    when: _oc_installed.rc not in [ 0 ]
     ansible.builtin.unarchive:
       src: "{{ oc.url }}"
       dest: "{{ oc.dest | default('/usr/bin') }}"
