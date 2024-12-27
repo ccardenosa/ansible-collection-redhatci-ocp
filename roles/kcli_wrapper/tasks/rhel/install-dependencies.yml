@@ -58,3 +58,12 @@
       include:
       - oc
       - kubectl
+
+- name: Install HAProxy pacakges
+  become: true
+  when: kcli_wrp_haproxy is defined
+  ansible.builtin.dnf:
+    name:
+    - haproxy
+    state: present
+
