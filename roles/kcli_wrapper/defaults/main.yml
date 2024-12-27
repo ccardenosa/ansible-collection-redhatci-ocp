@@ -102,6 +102,27 @@ kcli_wrp_libvirt:
 #   url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
 #   dest: /usr/bin
 #######################################################
+# When defined, it generate firewalld zone files
+# for the firellawd service running in the host machine
+#######################################################
+# kcli_wrp_firewalld:
+#    zone_files:
+#      - path: /etc/firewalld/zones/public.xml
+#        content: |
+#          <?xml version="1.0" encoding="utf-8"?>
+#          <zone>
+#            <short>Public</short>
+#            <description>For use in public areas...</description>
+#            <service name="ssh"/>
+#            <service name="dhcpv6-client"/>
+#            <service name="cockpit"/>
+#            <service name="dhcp"/>
+#            <service name="dns"/>
+#            <port port="3128" protocol="tcp"/>
+#            <masquerade/>
+#            <forward/>
+#          </zone>
+#######################################################
 # When defined, it generate dnsmasq drop-in file
 # to be used along with the default dnsmasq instance
 # running in the host machine
