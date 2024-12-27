@@ -152,6 +152,47 @@ kcli_wrp_libvirt:
 #         address=/openshift.example.lab/192.168.44.120
 #         address=/openshift-int.example.lab/192.168.44.120
 #######################################################
+# When defined, it generate HA Proxy drop-in files
+# to be used in the host machine
+#######################################################
+# kcli_wrp_haproxy:
+#   drop_in_files:
+#     - path: /etc/haproxy/conf.d/70-<your_clustername>.ha-proxy.cfg
+#       content: |
+#         listen api-server-6443
+#           log global
+#           timeout connect 5s
+#           timeout client 50s
+#           timeout server 50s
+#
+#           bind :::6443
+#           mode tcp
+#           balance source
+#           server <your_clustername>-api <your_api_server_endpoint:6443 check inter 1s
+#
+#         listen ingress-443
+#           log global
+#           timeout connect 5s
+#           timeout client 50s
+#           timeout server 50s
+#
+#           bind :::443
+#           mode tcp
+#           balance source
+#           server <your_clustername>-ingress <your_ingress_endpoint:443 check inter 1s
+#
+#         listen httpd-9000
+#             bind :::9000 v6only
+#             mode tcp
+#             balance source
+#             server localhost 127.0.0.1:9000 check inter 1s
+#
+#         listen gitserver-3000
+#             bind :::3000 v6only
+#             mode tcp
+#             balance source
+#             server localhost 127.0.0.1:3000 check inter 1s
+#######################################################
 # NOTE: Do not change these default values
 # KCLI default credentials are the below ones.
 # These files are read after cluster deployment is
