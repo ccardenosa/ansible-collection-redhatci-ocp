@@ -20,6 +20,7 @@
     - rollback
   loop:
     - kcli/deploy-cluster.yml
+    - kcli/socks5-proxy.yml
     - kcli/haproxy.yml
     - kcli/dnsmasq.yml
     - kcli/firewalld.yml
@@ -36,6 +37,7 @@
     - kcli/firewalld.yml
     - kcli/dnsmasq.yml
     - kcli/haproxy.yml
+    - kcli/socks5-proxy.yml
     - kcli/ssh-keys.yml
     - kcli/deploy-cluster.yml
     - kcli/get-cluster-credentials.yml
