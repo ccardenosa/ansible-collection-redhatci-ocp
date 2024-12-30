@@ -102,7 +102,7 @@ kcli_wrp_libvirt:
 #   url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
 #   dest: /usr/bin
 #######################################################
-# When defined, it generate firewalld zone files
+# When defined, it generates firewalld zone files
 # for the firellawd service running in the host machine
 #######################################################
 # kcli_wrp_firewalld:
@@ -123,7 +123,7 @@ kcli_wrp_libvirt:
 #            <forward/>
 #          </zone>
 #######################################################
-# When defined, it generate dnsmasq drop-in file
+# When defined, it generates dnsmasq drop-in file
 # to be used along with the default dnsmasq instance
 # running in the host machine
 # [https://docs.fedoraproject.org/en-US/fedora-server/administration/dnsmasq/]
@@ -152,7 +152,25 @@ kcli_wrp_libvirt:
 #         address=/openshift.example.lab/192.168.44.120
 #         address=/openshift-int.example.lab/192.168.44.120
 #######################################################
-# When defined, it generate HA Proxy drop-in files
+# When defined, it generates a systemd service that
+# start off a local SSH connection against the host
+# machine and bind the defined listen port to be used
+# as SOCKS5 proxy. It also genarates a kubeconfig
+# file along with proxy-url: socks5://<your_endpoint>
+# to be used from remote systems that need to connect
+# to virtualised Hub cluster running in the host
+# machine. Note that the DNS resolutions will be done
+# in the remote host so that, you can get advantage
+# of it to define private domains.
+#######################################################
+# kcli_wrp_socks5_proxy:
+#   description: SOCKS5 Proxy Server for...
+#   username: <your_bastion_username>
+#   host: <your_hypervisor_bastion_host>
+#   listen_port: <socks5 listen port>
+#   ssh_options: "-4"
+#######################################################
+# When defined, it generates HA Proxy drop-in files
 # to be used in the host machine
 #######################################################
 # kcli_wrp_haproxy:
