@@ -48,9 +48,9 @@ kcli_wrp_libvirt:
 #       gateway: 172.16.33.1
 #     - name: baremetal
 #       bridge: true
-#       bridgename: baremetal
+#       bridgename: baremetal # <-- same to 'name' if not defined
 #       nic: eth0
-#       bridge_ip: "192.168.80.1/25"
+#       bridge_cidr_ipv4: "192.168.80.1/25"
 #     - name: vhub-macvtap-net
 #       macvtap: true
 #       nic: eth0
