@@ -69,7 +69,6 @@
 
     - name: Create libvirt networks
       when: not (network.bridge is defined and network.bridge and
-            network.bridgename is defined and
             network.nic is defined)
       ansible.builtin.shell: |-
         cat << EOF > {{ _kcli_networks.path }}/{{ network.name }}.yml
